@@ -1,0 +1,46 @@
+body .p1-container {
+    background-color: blanchedalmond;
+    background: fixed;
+    border: 10px;
+    border-color: aqua;
+    border-width: 50px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.navigation {
+    background-color: yellow;
+    padding: 20px;
+    border: 1px solid black;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.scene-link {
+    color: #333;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #eee;
+    transition: background-color 0.3s ease;
+}
+
+.scene-link:hover {
+    background-color: #ddd;
+}
+
+.credit {
+    background-color: #e0f2f7;
+    padding: 10px;
+    border: 1px solid #81d4fa;
+    text-align: center;
+    color: #1a237e;
+    font-size: 14px;
+}
