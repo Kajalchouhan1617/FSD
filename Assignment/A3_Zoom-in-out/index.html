@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        function zoomin() {
+            let w = parseInt(document.getElementById("image").style.width);
+            w = w + 50;
+            let h = Math.ceil(w * 0.667);
+            document.getElementById("image").style.width = w + "px";
+            document.getElementById("image").style.heigh = h + "px";
+        }
+
+        function zoomout() {
+            let w = parseInt(document.getElementById("image").style.width);
+            w = w - 50;
+            let h = Math.ceil(w * 0.667);
+            document.getElementById("image").style.width = w + "px";
+            document.getElementById("image").style.heigh = h + "px";
+        }
+    </script>
+
+</head>
+
+<body>
+    <img src="pexels-valeriya-827513.jpg" alt="image" style="width:500px;" id="image">
+    <p id="zoom-in">
+        <input type="button" id="zoom-in" value="zoom-in" onclick="zoomin()" />
+    </p>
+    <p id="zoom-out">
+        <input type="button" id="zoom-out" value="zoom-out" onclick="zoomout()" /> </p>
+
+</body>
+
+</html>
