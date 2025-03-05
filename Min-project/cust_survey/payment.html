@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red Ball Pizza - Payment</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            text-align: center;
+            color: #d32f2f;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: calc(100% - 12px);
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .payment-methods {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        
+        .payment-methods button {
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .payment-methods button.selected {
+            background-color: #d32f2f;
+            color: white;
+        }
+        
+        .confirm-button {
+            background-color: #d32f2f;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Payment Information</h2>
+
+        <div class="payment-methods">
+            <button id="creditCardButton">Credit Card</button>
+            <button id="cashButton">Cash on Delivery</button>
+        </div>
+
+        <form id="creditCardForm" style="display: none;">
+            <div class="form-group">
+                <label for="cardNumber">Card Number *</label>
+                <input type="text" id="cardNumber" name="cardNumber" placeholder="**** **** **** ****" required>
+            </div>
+            <div class="form-group">
+                <label for="expiryDate">Expiry Date *</label>
+                <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV *</label>
+                <input type="number" id="cvv" name="cvv" placeholder="CVV" required>
+            </div>
+            <div class="form-group">
+                <label for="cardholderName">Cardholder Name *</label>
+                <input type="text" id="cardholderName" name="cardholderName" required>
+            </div>
+        </form>
+
+        <form id="cashForm" style="display: none;">
+            <p>You have selected cash on delivery. Please have the exact amount ready.</p>
+        </form>
+
+        <button class="confirm-button" id="confirmPayment">Confirm Payment</button>
+
+    </div>
+
+    <script>
+        const creditCardButton = document.getElementById('creditCardButton');
+        const cashButton = document.getElementById('cashButton');
+        const creditCardForm = document.getElementById('creditCardForm');
+        const cashForm = document.getElementById('cashForm');
+        const confirmPaymentButton = document.getElementById('confirmPayment');
+
+        creditCardButton.addEventListener('click', () => {
+            creditCardForm.style.display = 'block';
+            cashForm.style.display = 'none';
+            creditCardButton.classList.add('selected');
+            cashButton.classList.remove('selected');
+        });
+
+        cashButton.addEventListener('click', () => {
+            creditCardForm.style.display = 'none';
+            cashForm.style.display = 'block';
+            cashButton.classList.add('selected');
+            creditCardButton.classList.remove('selected');
+        });
+
+        confirmPaymentButton.addEventListener('click', () => {
+            if (creditCardForm.style.display === 'block') {
+                // Validate credit card form
+                if (document.getElementById('cardNumber').checkValidity() &&
+                    document.getElementById('expiryDate').checkValidity() &&
+                    document.getElementById('cvv').checkValidity() &&
+                    document.getElementById('cardholderName').checkValidity()) {
+                    alert("Credit Card Payment Confirmed! Thank you for your order.");
+                    // Here you would normally send the payment data to a server
+                    window.location.href = "order_confirmation.html";
+
+                } else {
+                    alert("Please fill in all credit card details.");
+                }
+            } else {
+                alert("Cash on Delivery Confirmed! Thank you for your order.");
+                // Here you would normally send the order data to a server
+                window.location.href = "order_confirmation.html";
+            }
+        });
+    </script>
+</body>
+
+</html>
