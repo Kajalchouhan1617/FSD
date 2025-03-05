@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .calculator {
+            padding-top: 50px;
+            margin-top: 100px;
+            width: 400px;
+            margin: 50px auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .calculator input[type="text"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 1.5rem;
+            text-align: right;
+        }
+        
+        .calculator .btn {
+            width: 23%;
+            margin: 2px;
+            font-size: 1.2rem;
+        }
+        
+        .calculator .btn-equal {
+            width: 48%;
+        }
+        
+        h1 {
+            text-align: center;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            color: #f8f9fa;
+            background-color: darkblue;
+            font-size: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>Calculator</h1>
+    </div>
+
+    <div class="container">
+        <div class="calculator">
+            <input type="text" id="result" readonly>
+            <div class="row">
+                <button class="btn btn-secondary" onclick="clearResult()">C</button>
+                <button class="btn btn-secondary" onclick="deleteLast()">DEL</button>
+                <button class="btn btn-secondary" onclick="appendToResult('/')">/</button>
+                <button class="btn btn-secondary" onclick="appendToResult('*')">*</button>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary" onclick="appendToResult('7')">7</button>
+                <button class="btn btn-primary" onclick="appendToResult('8')">8</button>
+                <button class="btn btn-primary" onclick="appendToResult('9')">9</button>
+                <button class="btn btn-secondary" onclick="appendToResult('-')">-</button>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary" onclick="appendToResult('4')">4</button>
+                <button class="btn btn-primary" onclick="appendToResult('5')">5</button>
+                <button class="btn btn-primary" onclick="appendToResult('6')">6</button>
+                <button class="btn btn-secondary" onclick="appendToResult('+')">+</button>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary" onclick="appendToResult('1')">1</button>
+                <button class="btn btn-primary" onclick="appendToResult('2')">2</button>
+                <button class="btn btn-primary" onclick="appendToResult('3')">3</button>
+                <button class="btn btn-secondary" onclick="appendToResult('%')">%</button>
+
+            </div>
+            <div class="row">
+                <button class="btn btn-primary" onclick="appendToResult('0')">0</button>
+                <button class="btn btn-primary" onclick="appendToResult('.')">.</button>
+                <button class="btn btn-success btn-equal" onclick="calculateResult()">=</button>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function appendToResult(value) {
+            document.getElementById('result').value += value;
+        }
+
+        function clearResult() {
+            document.getElementById('result').value = '';
+        }
+
+        function calculateResult() {
+            try {
+                document.getElementById('result').value = eval(document.getElementById('result').value);
+            } catch (error) {
+                document.getElementById('result').value = 'Error';
+            }
+        }
+
+        function deleteLast() {
+            let currentResult = document.getElementById('result').value;
+            document.getElementById('result').value = currentResult.slice(0, -1);
+        }
+
+        function calculate() {
+            try {
+                let expression = result.value;
+                if (expression.includes('%')) {
+                    expression = handlePercentage(expression);
+                }
+                result.value = eval(expression);
+            } catch (error) {
+                result.value = 'Error';
+            }
+        }
+
+
+        function handlePercentage(expression) {
+            const parts = expression.split('%');
+            if (parts.length === 2 && parts[0].trim() !== '') {
+                const base = parseFloat(parts[0]);
+                const percentage = parseFloat(parts[1]);
+                if (!isNaN(base) && !isNaN(percentage)) {
+                    return (base * (percentage / 100)).toString();
+                }
+            }
+            return 'Error';
+        }
+
+        function backspace() {
+            result.value = result.value.slice(0, -1);
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
