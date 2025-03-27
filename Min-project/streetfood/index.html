@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Street Corner Food</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        .menu-item {
+            width: 360px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+            text-align: center;
+            color: red;
+            background-color: bisque;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        .menu-item img {
+            width: 100%;
+            height: 250px;
+            border-radius: 5px;
+        }
+        
+        .cart-section {
+            margin-top: 20px;
+            background-color: bisque;
+            border: 1px solid #ddd;
+            width: 1110px;
+            height: auto;
+            margin-right: 12px;
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        
+        .container {
+            width: 1400px;
+            height: auto;
+            background-color: red;
+            padding-bottom: 15px;
+        }
+        
+        h1 {
+            color: red;
+            background-color: bisque;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+        
+        h4 {
+            color: black;
+        }
+        
+        .btn {
+            background-color: red;
+            color: bisque;
+        }
+        
+        h2 {
+            color: bisque;
+            background-color: red;
+            border: red solid 5px;
+            text-align: center;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center">Hunger's Corner</h1>
+        <input type="text" id="searchBox" class="form-control" placeholder="Search menu items...">
+
+        <div class="row" id="menu">
+            <div class="col-md-4 menu-item" data-name="Burger">
+                <img src="img/th.png" alt="Burger">
+                <h4>Burger</h4>
+                <p>$12.00</p>
+                <input type="number" class="form-control quantity" value="1" min="1"> <br>
+                <button class="btn btn-primary add-to-cart" data-price="12.00">Add to Cart</button>
+            </div>
+            <div class="col-md-4 menu-item" data-name="Pizza">
+                <img src="img/pizza.png" alt="Pizza">
+                <h4>Pizza</h4>
+                <p>$18.00</p>
+                <input type="number" class="form-control quantity" value="1" min="1"> <br>
+                <button class="btn btn-primary add-to-cart" data-price="18.00">Add to Cart</button>
+            </div>
+            <div class="col-md-4 menu-item" data-name="Pasta">
+                <img src="img/pasta.png" alt="Pasta">
+                <h4>Pasta</h4>
+                <p>$17.00</p>
+                <input type="number" class="form-control quantity" value="1" min="1"><br>
+                <button class="btn btn-primary add-to-cart" data-price="17.00">Add to Cart</button>
+            </div>
+            <div class="col-md-4 menu-item" data-name="pavbhaji">
+                <img src="img/pavbhaji.png" alt="pavbhaji">
+                <h4>Pavbhaji</h4>
+                <p>$15.00</p>
+                <input type="number" class="form-control quantity" value="1" min="1"><br>
+                <button class="btn btn-primary add-to-cart" data-price="15.00">Add to Cart</button>
+            </div>
+            <div class="col-md-4 menu-item" data-name="vadapav">
+                <img src="img/vadapav.png" alt="vadapav">
+                <h4>Vadapav</h4>
+                <p>$16.00</p>
+                <input type="number" class="form-control quantity" value="1" min="1"><br>
+                <button class="btn btn-primary add-to-cart" data-price="16.00">Add to Cart</button>
+            </div>
+            <div class="col-md-4 menu-item" data-name="chowmein">
+                <img src="img/chowmein.png" alt="chowmein">
+                <h4>Chowmein</h4>
+                <p>$12.00</p>
+                <input type="number" class="form-control quantity" value="1" min="1"><br>
+                <button class="btn btn-primary add-to-cart" data-price="12.00">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="cart-section">
+            <h2>Cart</h2>
+            <ul id="cart-list" class="list-group"></ul>
+            <p>Subtotal: $<span id="subtotal">0</span></p>
+            <p>GST (8%): $<span id="gst">0</span></p>
+            <p>Delivery Charge (4%): $<span id="delivery">0</span></p>
+            <p>Total: $<span id="total">0</span></p>
+            <label>Payment Mode:</label>
+            <select id="paymentMode" class="form-control"> <br>
+                <option>Credit Card</option>
+                <option>Cash</option>
+                <option>UPI</option>
+            </select>
+            <br> &nbsp;
+            <button class="btn btn-success" id="checkout">Checkout</button> &nbsp;&nbsp;
+            <button class="btn btn-secondary" id="printBill">Print Bill</button> &nbsp;&nbsp;
+            <button class="btn btn-danger" id="clearCart">Clear Cart</button>
+            <br>
+        </div>
+    </div>
+
+
+    <script>
+        let subtotal = 0;
+        $(document).ready(function() {
+            $("#searchBox").on("keyup", function() {
+                let value = $(this).val().toLowerCase();
+                $(".menu-item").filter(function() {
+                    $(this).toggle($(this).attr("data-name").toLowerCase().includes(value));
+                });
+            });
+
+            $(".add-to-cart").click(function() {
+                let itemName = $(this).parent().attr("data-name");
+                let itemPrice = parseFloat($(this).data("price"));
+                let quantity = parseInt($(this).siblings(".quantity").val());
+                let totalItemPrice = itemPrice * quantity;
+                subtotal += totalItemPrice;
+                let gst = subtotal * 0.08; // 8% GST
+                let delivery = subtotal * 0.04; // 4% delivery charge
+                let total = subtotal + gst + delivery;
+
+                $("#subtotal").text(subtotal.toFixed(2));
+                $("#gst").text(gst.toFixed(2));
+                $("#delivery").text(delivery.toFixed(2));
+                $("#total").text(total.toFixed(2));
+
+                let listItem = $(`<li class='list-group-item'>${itemName} x${quantity} - $${totalItemPrice} <button class='btn btn-danger btn-sm remove-item'>Remove</button></li>`);
+                listItem.find(".remove-item").click(function() {
+                    subtotal -= totalItemPrice;
+                    let gst = subtotal * 0.08;
+                    let delivery = subtotal * 0.04;
+                    let total = subtotal + gst + delivery;
+
+                    $("#subtotal").text(subtotal.toFixed(2));
+                    $("#gst").text(gst.toFixed(2));
+                    $("#delivery").text(delivery.toFixed(2));
+                    $("#total").text(total.toFixed(2));
+                    listItem.remove();
+                });
+                $("#cart-list").append(listItem);
+            });
+
+            $("#checkout").click(function() {
+                alert("Order placed! Thank you. Payment Mode: " + $("#paymentMode").val());
+            });
+
+            $("#printBill").click(function() {
+                let billContent = "<h3>Street Corner Food Bill</h3><ul>";
+                $("#cart-list li").each(function() {
+                    billContent += `<li>${$(this).text()}</li>`;
+                });
+                billContent += `</ul><p>Total: $${$("#total").text()}</p>`;
+                let printWindow = window.open('', '', 'width=600,height=400');
+                printWindow.document.write(billContent);
+                printWindow.document.close();
+                printWindow.print();
+            });
+
+            $("#clearCart").click(function() {
+                $("#cart-list").empty();
+                $("#subtotal, #gst, #delivery, #total").text("0");
+                subtotal = 0;
+            });
+        });
+    </script>
+</body>
+
+</html>
