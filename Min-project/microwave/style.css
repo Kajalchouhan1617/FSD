@@ -1,0 +1,17 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.microwave {
+    background-color: #333;
+    color: white;
+    width: 300px;
+    margin: auto;
+}
+
+.screen {
+    background-color: black;
+    color: lime;
+    font-size: 24px;
+    text-align: center;
+}
