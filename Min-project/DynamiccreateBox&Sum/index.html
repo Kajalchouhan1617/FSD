@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Box Creator & Summation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        .container {
+            background-color: #e0f7fa;
+            /* Light Cyan */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+            /* Adjust width as needed */
+        }
+        
+        h1 {
+            color: #00838f;
+            /* Teal darken-3 */
+            margin-bottom: 20px;
+        }
+        
+        label {
+            font-size: 18px;
+            color: #263238;
+            /* Blue Grey darken-4 */
+            margin-right: 10px;
+        }
+        
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #b0bec5;
+            /* Blue Grey lighten-2 */
+            border-radius: 5px;
+            width: 80px;
+            margin-right: 15px;
+        }
+        
+        button {
+            background-color: #ffb74d;
+            /* Amber lighten-2 */
+            color: #212121;
+            /* Grey darken-4 */
+            border: none;
+            padding: 10px 20px 40px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: greenyellow;
+            /* Amber darken-1 */
+        }
+        
+        #output {
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        #output input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #b0bec5;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            width: calc(100% - 22px);
+            /* Adjust width for padding and border */
+            box-sizing: border-box;
+        }
+        
+        #output input[type="button"] {
+            background-color: #4caf50;
+            /* Green */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 10px;
+        }
+        
+        #output input[type="button"]:hover {
+            background-color: #43a047;
+            /* Green darken-1 */
+        }
+        
+        #result {
+            background-color: #f0f4c3;
+            /* Lime lighten-4 */
+            font-weight: bold;
+            color: #558b2f;
+            /* Light Green darken-3 */
+        }
+        
+        .error-message {
+            color: #d32f2f;
+            /* Red darken-2 */
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Create Boxes & Calculate Sum</h1>
+        <label for="Text">Number of boxes:</label>
+        <input type="number" id="t1" style="font-size:16px;" min="1" max="10" value="5" />
+        <button type="button" onclick="createboxes()" style="width:100px;height:35px;font-size:16px;">Create Boxes</button>
+        <div id="output">
+        </div>
+    </div>
+
+    <script>
+        function createboxes() {
+            const n = parseInt(document.getElementById("t1").value);
+            const outputDiv = document.getElementById("output");
+            outputDiv.innerHTML = ""; // Clear previous boxes
+
+            if (isNaN(n) || n < 1 || n > 10) {
+                const errorMessage = document.createElement("p");
+                errorMessage.classList.add("error-message");
+                errorMessage.textContent = "Please enter a number between 1 and 10.";
+                outputDiv.appendChild(errorMessage);
+                return;
+            }
+
+            for (let x = 1; x <= n; x++) {
+                const input = document.createElement("input");
+                input.type = "text";
+                input.id = "num" + x;
+                input.placeholder = `Enter number ${x}`;
+                outputDiv.appendChild(input);
+                outputDiv.appendChild(document.createElement("br"));
+            }
+
+            const sumButton = document.createElement("input");
+            sumButton.type = "button";
+            sumButton.value = "Calculate Sum";
+            sumButton.onclick = calc;
+            outputDiv.appendChild(sumButton);
+            outputDiv.appendChild(document.createElement("br"));
+
+            const resultInput = document.createElement("input");
+            resultInput.type = "text";
+            resultInput.id = "result";
+            resultInput.value = "Total: 0";
+            resultInput.readOnly = true;
+            outputDiv.appendChild(resultInput);
+            outputDiv.appendChild(document.createElement("br"));
+        }
+
+        function calc() {
+            const n = parseInt(document.getElementById("t1").value);
+            let sum = 0;
+            for (let x = 1; x <= n; x++) {
+                const value = parseInt(document.getElementById("num" + x).value);
+                if (!isNaN(value)) {
+                    sum += value;
+                }
+            }
+            document.getElementById("result").value = "Total: " + sum;
+        }
+
+        // Initial creation of boxes (you can set a default number in the input)
+        createboxes();
+    </script>
+</body>
+
+</html>
