@@ -1,0 +1,90 @@
+/* Basic Styling */
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+    /* Light gray background */
+    color: #333;
+    /* Dark gray text color */
+}
+
+header {
+    background-color: #fff;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid lightblue;
+    /* Light blue border */
+}
+
+main {
+    display: flex;
+    /* Use flexbox for layout */
+    padding: 20px;
+}
+
+.recipe {
+    flex: 1;
+    /* Takes up 1 portion of available space */
+    margin-right: 20px;
+}
+
+.reviews {
+    flex: 1;
+    /* Takes up 1 portion of available space */
+}
+
+
+/* Recipe Section Styling */
+
+.recipe img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.recipe h2,
+.recipe h3 {
+    color: #555;
+}
+
+.recipe ul,
+.recipe ol {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+
+/* Reviews Section Styling */
+
+.review {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+
+.rating {
+    font-size: 1.2em;
+    color: gold;
+    margin-bottom: 5px;
+}
+
+.reviewer {
+    font-style: italic;
+    color: #777;
+    font-size: 0.9em;
+}
+
+.reviews {
+    border: 5px solid #66cda6;
+}
+.container-img {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    background-image: container-img;
+    justify-items: start;
+}
