@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunny Acres Farm Shop</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .sidebar {
+            background-color: lightskyblue;
+            padding: 20px;
+        }
+        
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            margin-bottom: 5px;
+            background-color: #1c4d96;
+            color: #faf7f7;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        
+        .sidebar a:hover {
+            background-color: #c0c4cc;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .footer {
+            background-color: #105d34;
+            padding: 10px;
+            text-align: center;
+            margin-top: 20px;
+            color: #f8f9fa;
+        }
+        
+        .product-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .product-list li::before {
+            content: "> ";
+        }
+        
+        .hours-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .hours-list li::before {
+            content: "> ";
+        }
+        
+        h1 {
+            background-color: navy;
+            color: #f8f9fa;
+            padding-left: 5px;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        h2 {
+            color: #f8f9fa;
+            background-color: rgb(64, 218, 64);
+            font-family: Arial, Helvetica, sans-serif;
+            padding-left: 5px;
+        }
+        .container{
+            width: 100%;
+            height: auto;
+            position: relative;
+            justify-items: end;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="heading" style="color: green;background-color: #f8f9fa;">SUNNY <span style="font-size: 86px;">Acres</span><img src="photo.png" alt="Sunny Acres Logo" class="img-fluid mb-4" style="width: 600px;" ></h1>
+        <div class="container2">
+            <p style="color: green;"> Tammy and Brent Nielsen <br>1973 Hwy G <br>Council Bluffs, IA 51503</p>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 sidebar">
+                <a href="#">HOME</a>
+                <a href="https://oursunnyacres.com/">Autumn Fun</a>
+                <a href="#">Scary Good</a>
+                <a href="https://sunnyacrespettingfarmnorthampton.co.uk/animals/">Meet the Animals</a>
+                <a href="#">For your Tastebuds</a>
+            </div>
+            <div class="col-md-9 content">
+                <h1>The Farm Shop</h1>
+                <p>The Sunny Acres Farm Shop aims to offer the highest quality fresh produce. You can pick your own or buy it in our shop. Set amidst acres of outstanding natural beauty on the beautiful rolling hills northeast of Council Bluffs, the Farm
+                    Shop is easily reached on Highway G, with easy access from Interstate 40.</p>
+                <img src="th.png" alt="Farm Shop" class="img-fluid float-right ml-3">
+                <p>The Farm Shop was established over 25 years ago with great success. Our products have won numerous awards at local festivals and fairs. We also cater to local supermarkets in the Council Bluffs/Omaha area. Look for our products every Saturday
+                    morning from May to October at the Council Bluffs Farmers' Market.</p>
+                <h2>Hours</h2>
+                <ul class="hours-list">
+                    <li>Monday - Friday: 9 am - 5 pm</li>
+                    <li>Saturday: 9 am - 3 pm</li>
+                    <li>Pick Your Own Produce is available from May 15 - October 22</li>
+                    <li>The Farm Shop is open year-round</li>
+                </ul>
+                <h2>Products</h2>
+                <ul class="product-list">
+                    <li>Freshly baked breads and quiches</li>
+                    <li>High quality meats</li>
+                    <li>Cheese and other dairy products</li>
+                    <li>Freshly-picked fruits and vegetables (in season)</li>
+                    <li>Canned goods and preserves</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        SUNNY ACRES *TAMMY & BRENT NIELSEN * 1977 HIGHWAY G * COUNCIL BLUFFS, IA 51503
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
