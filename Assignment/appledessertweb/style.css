@@ -22,6 +22,7 @@ main {
     display: flex;
     /* Use flexbox for layout */
     padding: 20px;
+    margin: 0;
 }
 
 .recipe {
@@ -32,6 +33,7 @@ main {
 
 .reviews {
     flex: 1;
+    margin-top: 19px;
     /* Takes up 1 portion of available space */
 }
 
@@ -87,4 +89,7 @@ main {
     background-color: #fff;
     background-image: container-img;
     justify-items: start;
+}
+h1, h2, h3 {
+    padding: 5px;
 }
