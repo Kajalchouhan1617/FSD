@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Stationary Shop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="container">
+        <h1>Stationary Shop</h1>
+        <table>
+            <div id="t1">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Rate</th>
+                        <th>Qty</th>
+                        <th>Amt Cal</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox" id="penCheck"> <label for="penCheck">Pen</label></td>
+                        <td id="penRate">20</td>
+                        <td><input type="number" id="penQty" value="0"></td>
+                        <td><button onclick="calculateAmount('pen')">Amt Cal</button></td>
+                        <td id="penAmt">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="pencilCheck"> <label for="pencilCheck">Pencil</label></td>
+                        <td id="pencilRate">10</td>
+                        <td><input type="number" id="pencilQty" value="0"></td>
+                        <td><button onclick="calculateAmount('pencil')">Amt Cal</button></td>
+                        <td id="pencilAmt">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="eraserCheck"> <label for="eraserCheck">Eraser</label></td>
+                        <td id="eraserRate">5</td>
+                        <td><input type="number" id="eraserQty" value="0"></td>
+                        <td><button onclick="calculateAmount('eraser')">Amt Cal</button></td>
+                        <td id="eraserAmt">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="notebookCheck"> <label for="notebookCheck">Notebook</label></td>
+                        <td id="notebookRate">50</td>
+                        <td><input type="number" id="notebookQty" value="0"></td>
+                        <td><button onclick="calculateAmount('notebook')">Amt Cal</button></td>
+                        <td id="notebookAmt">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" id="scaleCheck"> <label for="scaleCheck">Scale</label></td>
+                        <td id="scaleRate">15</td>
+                        <td><input type="number" id="scaleQty" value="0"></td>
+                        <td><button onclick="calculateAmount('scale')">Amt Cal</button></td>
+                        <td id="scaleAmt">0.00</td>
+                    </tr>
+                </tbody>
+            </div>
+        </table>
+        <div id="grandTotal">
+            Grand Total: <span id="totalAmount"></span>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
