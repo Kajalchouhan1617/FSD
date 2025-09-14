@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Report: Tomato Food Delivery System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Visualization & Content Choices:
+        - Report Info: User Requirement Analysis (SRS - 2.3) -> Goal: Organize & Inform -> Method: Tabbed interface (Customer, Restaurant, Delivery, Admin) -> Interaction: Click tabs to switch views -> Justification: Clearly separates distinct user roles. Library: HTML/CSS/JS.
+        - Report Info: Product Functions (3.2) -> Goal: Inform -> Method: Interactive list (hover/click for more details if available - currently placeholder) -> Interaction: Hover/Click -> Justification: Makes a list more engaging. Library: HTML/CSS/JS.
+        - Report Info: Table Structure (MongoDB Collections - 3.7) -> Goal: Inform -> Method: Accordion/Collapsible sections for each collection's JSON structure -> Interaction: Click to expand/collapse -> Justification: Manages large code blocks efficiently. Library: HTML/CSS/JS.
+        - Report Info: ER Diagram description (3.8) -> Goal: Organize & Relationships -> Method: Styled HTML/CSS to represent entities and textually describe relationships. No complex graphical rendering. -> Interaction: Static display -> Justification: Simple visual representation of textual info. Library: HTML/CSS.
+        - Report Info: API Endpoints (Table 4.1) -> Goal: Inform -> Method: HTML table -> Interaction: Static display -> Justification: Standard for tabular data. Library: HTML.
+        - Report Info: Test Cases (4.4) -> Goal: Organize & Inform -> Method: Tabbed interface (Functional, Non-Functional) with expandable test case details -> Interaction: Click tabs, click test case to expand -> Justification: Organizes numerous test cases clearly. Library: HTML/CSS/JS.
+        - Report Info: Feasibility Study (2.4) & Objectives (2.5) -> Goal: Inform -> Method: Clearly demarcated text sections -> Interaction: Static -> Justification: Direct presentation of factual information. Library: HTML/CSS.
+        - General Text Sections (Abstract, Intro, etc.): Presented in clean, readable format.
+        CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. Chart.js not used as report lacks quantitative data suitable for typical charts.
+    -->
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .tab-button.active { background-color: #DC2626 /* bg-red-600 */; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .accordion-content.active { max-height: 500px; /* Adjust as needed */ }
+        /* Custom scrollbar for better aesthetics if needed */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px;}
+        ::-webkit-scrollbar-thumb { background: #DC2626; border-radius: 10px;}
+        ::-webkit-scrollbar-thumb:hover { background: #B91C1C; }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-700 flex">
+
+    <aside class="w-64 bg-slate-800 text-white p-6 space-y-3 fixed top-0 left-0 h-screen overflow-y-auto">
+        <h1 class="text-2xl font-bold text-red-500 mb-6">Tomato Delivery SPA</h1>
+        <nav>
+            <ul class="space-y-2">
+                <li><a href="#title-page" class="nav-link block py-2 px-3 hover:bg-slate-700 rounded-md transition-colors duration-150">Title & Abstract</a></li>
+                <li><a href="#introduction" class="nav-link block py-2 px-3 hover:bg-slate-700 rounded-md transition-colors duration-150">Introduction</a></li>
+                <li><a href="#problem-domain" class="nav-link block py-2 px-3 hover:bg-slate-700 rounded-md transition-colors duration-150">Problem Domain</a></li>
+                <li><a href="#user-requirements" class="nav-link block py-2 px-3 hover:bg-slate-700 rounded-md transition-colors duration-150">User Requirements (SRS)</a></li>
+                <li><a href="#feasibility-objectives" class="nav-link block py-2 px-3 hover:bg-slate-700 rounded-md transition-colors duration-150">Feasibility & Objectives</a></li>
+                <li><a href="#product-design" class="nav-link block py-2 px-3 hover:bg-slate-700 rounded-md transition-colors duration-150">Product Design</a></li>
+                <li><a href="#database-design" class="nav-link block py-2 px-3 hover:bg-slate-700 rounded-md transition-colors duration-150">Database Design</a></li>
+                <li><a href="#specific-requirements" class="nav-link block py-2 px-3 hover:bg-slate-700 rounded-md transition-colors duration-150">Specific Requirements</a></li>
+                <li><a href="#development-tech" class="nav-link block py-2 px-3 hover:bg-slate-700 rounded-md transition-colors duration-150">Technology Stack</a></li>
+                <li><a href="#implementation-details" class="nav-link block py-2 px-3 hover:bg-slate-700 rounded-md transition-colors duration-150">Implementation Details</a></li>
+                <li><a href="#test-cases" class="nav-link block py-2 px-3 hover:bg-slate-700 rounded-md transition-colors duration-150">Test Cases</a></li>
+                <li><a href="#conclusion-future" class="nav-link block py-2 px-3 hover:bg-slate-700 rounded-md transition-colors duration-150">Conclusion & Future</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="ml-64 p-8 flex-1 overflow-y-auto">
+        <div id="title-page" class="content-section active pt-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <header class="text-center mb-8">
+                    <h1 class="text-4xl font-bold text-red-600">TOMATO FOOD DELIVERY SYSTEM</h1>
+                    <p class="text-slate-500 mt-2">Interactive Project Report</p>
+                </header>
+                <section>
+                    <h2 class="text-2xl font-semibold text-red-600 mb-3">Abstract</h2>
+                    <p class="text-justify leading-relaxed">This report details the development of "Tomato Food Delivery," a comprehensive food ordering and delivery system built using the MERN (MongoDB, Express.js, React, Node.js) stack. The project aims to provide a seamless and efficient platform connecting customers with local restaurants for food ordering and delivery. The system incorporates features such as user registration and authentication, restaurant listing, menu browsing, order placement, real-time order tracking, and secure payment processing. For restaurants, it offers functionalities for menu management, order reception, and status updates. The MERN stack was chosen for its robust, scalable, and full-stack JavaScript capabilities, enabling rapid development and a highly interactive user experience. This document outlines the problem statement, system requirements, architectural design, implementation details, testing procedures, and future enhancements of the "Tomato Food Delivery" application. The project addresses the growing demand for convenient food delivery services by offering a user-friendly and reliable solution.</p>
+                </section>
+            </div>
+        </div>
+
+        <div id="introduction" class="content-section pt-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                 <h2 class="text-2xl font-semibold text-red-600 mb-4">Chapter 1: Introduction to Company</h2>
+                 <p class="text-justify leading-relaxed mb-4">This section introduces the context of the "Tomato Food Delivery" project. It outlines the hypothetical company, "Tomato Eats," and its vision for creating a user-centric food delivery platform. Explore this section to understand the project's origins and the market it aims to serve.</p>
+                <p class="text-justify leading-relaxed">This project, "Tomato Food Delivery," is developed as part of the six-month industrial training program, focusing on practical application of modern web development technologies. While not developed for a specific existing company, the project simulates the development process within a dynamic startup environment aiming to disrupt the local food delivery market. The hypothetical company, "Tomato Eats," envisions a platform that prioritizes user convenience, restaurant efficiency, and seamless delivery logistics.</p>
+                <p class="text-justify leading-relaxed mt-4">"Tomato Eats" aims to create a robust and scalable solution that can cater to a diverse user base and a growing network of restaurants. The company's philosophy revolves around leveraging cutting-edge technology to provide a superior food ordering experience, ensuring timely deliveries and a wide variety of culinary options. The project serves as a proof of concept for building a full-fledged food delivery ecosystem, demonstrating the capabilities of the MERN stack in handling complex real-time data and user interactions. The development process adhered to industry best practices, focusing on modularity, maintainability, and scalability, which are crucial for any technology-driven startup.</p>
+            </div>
+        </div>
+
+        <div id="problem-domain" class="content-section pt-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-red-600 mb-4">Chapter 2: Introduction to Problem</h2>
+                <p class="text-justify leading-relaxed mb-6">This chapter delves into the problem that the "Tomato Food Delivery" system aims to solve. It covers an overview of the current food delivery landscape, identifies issues with existing systems, and sets the stage for the proposed solution. Understanding this section is key to appreciating the project's purpose and scope.</p>
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">2.1 Overview</h3>
+                    <p class="text-justify leading-relaxed">In today's fast-paced world, convenience plays a significant role in daily life. Food delivery services have become an indispensable part of this convenience, allowing individuals to order meals from their favorite restaurants and have them delivered to their doorstep. The demand for such services has surged, driven by busy lifestyles, technological advancements, and the desire for diverse culinary experiences without the need to dine out. However, many existing platforms often face challenges such as complex user interfaces, limited restaurant choices, inefficient order tracking, and occasional delivery delays. The "Tomato Food Delivery" project aims to address these pain points by providing a streamlined, intuitive, and reliable platform that enhances the overall food ordering and delivery experience.</p>
+                </section>
+                <section>
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">2.2 Existing System</h3>
+                    <p class="text-justify leading-relaxed">The current landscape of food delivery services is dominated by several large players, each offering a range of features. These systems typically allow users to browse menus, place orders, and track deliveries. Restaurants use these platforms to manage their online presence, update menus, and process incoming orders. While these systems have revolutionized food access, they often present certain limitations. Some platforms may have high commission rates for restaurants, leading to increased food prices for consumers. Others might suffer from a lack of personalization, generic user interfaces, or a fragmented experience across different devices. Furthermore, real-time tracking and efficient customer support can sometimes be lacking, leading to user frustration. The "Tomato Food Delivery" system seeks to learn from these existing models and improve upon them by focusing on a user-centric design, robust backend, and efficient logistics.</p>
+                </section>
+            </div>
+        </div>
+
+        <div id="user-requirements" class="content-section pt-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-red-600 mb-4">2.3 User Requirement Analysis (SRS)</h2>
+                <p class="text-justify leading-relaxed mb-6">The Software Requirement Specification (SRS) is crucial for defining what the system will do. This section breaks down the requirements for different user roles: Customers, Restaurant Owners, Delivery Personnel, and Administrators. Use the tabs below to explore the specific needs of each user group.</p>
+                <div class="mb-4 border-b border-gray-200">
+                    <nav class="flex space-x-1" aria-label="Tabs">
+                        <button class="srs-tab-button tab-button active py-3 px-4 text-sm font-medium text-center text-slate-500 rounded-t-lg hover:text-slate-700 hover:bg-slate-100" data-target="srs-customer">Customer</button>
+                        <button class="srs-tab-button tab-button py-3 px-4 text-sm font-medium text-center text-slate-500 rounded-t-lg hover:text-slate-700 hover:bg-slate-100" data-target="srs-restaurant">Restaurant Owner</button>
+                        <button class="srs-tab-button tab-button py-3 px-4 text-sm font-medium text-center text-slate-500 rounded-t-lg hover:text-slate-700 hover:bg-slate-100" data-target="srs-delivery">Delivery Personnel</button>
+                        <button class="srs-tab-button tab-button py-3 px-4 text-sm font-medium text-center text-slate-500 rounded-t-lg hover:text-slate-700 hover:bg-slate-100" data-target="srs-admin">Administrator</button>
+                    </nav>
+                </div>
+                <div>
+                    <div id="srs-customer" class="srs-tab-content tab-content active">
+                        <h4 class="text-lg font-semibold text-amber-600 mb-2">Customer Requirements:</h4>
+                        <ul class="list-disc list-inside space-y-1 leading-relaxed">
+                            <li>User Registration & Authentication: Ability to create an account, log in/out securely.</li>
+                            <li>Profile Management: View and update personal information, delivery addresses.</li>
+                            <li>Restaurant Browsing: Search and filter restaurants by cuisine, rating, distance.</li>
+                            <li>Menu Browsing: View detailed menus with item descriptions, prices, and images.</li>
+                            <li>Order Placement: Add items to cart, specify quantity, apply discounts, place orders.</li>
+                            <li>Payment Gateway Integration: Secure online payment options (e.g., credit card, UPI).</li>
+                            <li>Order Tracking: Real-time updates on order status (e.g., preparing, out for delivery, delivered).</li>
+                            <li>Order History: View past orders and reorder.</li>
+                            <li>Ratings & Reviews: Provide feedback on restaurants and food items.</li>
+                            <li>Notifications: Receive alerts for order status changes, promotions.</li>
+                        </ul>
+                    </div>
+                    <div id="srs-restaurant" class="srs-tab-content tab-content">
+                        <h4 class="text-lg font-semibold text-amber-600 mb-2">Restaurant Owner Requirements:</h4>
+                        <ul class="list-disc list-inside space-y-1 leading-relaxed">
+                            <li>Restaurant Registration & Profile: Create and manage restaurant profile, operating hours.</li>
+                            <li>Menu Management: Add, edit, delete food items, categories, prices, availability.</li>
+                            <li>Order Management: Receive new order notifications, accept/reject orders, update order status.</li>
+                            <li>Dashboard: View sales reports, order statistics.</li>
+                            <li>Delivery Management: Assign orders to delivery personnel (if applicable).</li>
+                        </ul>
+                    </div>
+                    <div id="srs-delivery" class="srs-tab-content tab-content">
+                        <h4 class="text-lg font-semibold text-amber-600 mb-2">Delivery Personnel Requirements:</h4>
+                        <ul class="list-disc list-inside space-y-1 leading-relaxed">
+                            <li>Login: Secure login to access assigned deliveries.</li>
+                            <li>Order Assignment: Receive notifications for new delivery assignments.</li>
+                            <li>Route Optimization: View optimal delivery routes (future scope).</li>
+                            <li>Order Status Update: Update delivery status (e.g., picked up, delivered).</li>
+                        </ul>
+                    </div>
+                    <div id="srs-admin" class="srs-tab-content tab-content">
+                        <h4 class="text-lg font-semibold text-amber-600 mb-2">Administrator Requirements:</h4>
+                        <ul class="list-disc list-inside space-y-1 leading-relaxed">
+                            <li>User Management: Manage customer and restaurant accounts.</li>
+                            <li>Restaurant Approval: Approve/disapprove new restaurant registrations.</li>
+                            <li>Order Monitoring: Oversee all active and past orders.</li>
+                            <li>Content Management: Manage categories, promotions, banners.</li>
+                            <li>Reporting: Generate reports on sales, popular items, delivery performance.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="feasibility-objectives" class="content-section pt-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-red-600 mb-4">2.4 Feasibility Study & 2.5 Project Objectives</h2>
+                <p class="text-justify leading-relaxed mb-6">This section combines the feasibility assessment of the project (technical, economic, operational, schedule) with its clearly defined objectives. It establishes the viability and the core goals that the "Tomato Food Delivery" system aims to achieve.</p>
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">Feasibility Study</h3>
+                    <ul class="list-disc list-inside space-y-2 leading-relaxed">
+                        <li><strong>Technical Feasibility:</strong> The MERN stack is mature and well-supported. Necessary skills are available. Integration with third-party APIs is achievable.</li>
+                        <li><strong>Economic Feasibility:</strong> Minimal licensing costs due to open-source tech. Potential revenue through commissions and delivery fees.</li>
+                        <li><strong>Operational Feasibility:</strong> Aligns with market demand. User-friendly design minimizes training. Scalable for future growth.</li>
+                        <li><strong>Schedule Feasibility:</strong> Six-month timeline allows for MVP development using Agile methodologies.</li>
+                    </ul>
+                    <p class="mt-2 font-medium">Conclusion: The project is deemed highly feasible across all dimensions.</p>
+                </section>
+                <section>
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">Objectives of Project</h3>
+                    <ol class="list-decimal list-inside space-y-1 leading-relaxed">
+                        <li>To develop a secure and user-friendly platform for customers to browse restaurants, view menus, and place food orders online.</li>
+                        <li>To enable restaurants to efficiently manage their menus, receive new orders, and update order statuses in real-time.</li>
+                        <li>To implement a reliable order tracking system that provides customers with real-time updates on their order status from preparation to delivery.</li>
+                        <li>To integrate a secure and diverse payment gateway to facilitate smooth and convenient online transactions for users.</li>
+                    </ol>
+                </section>
+            </div>
+        </div>
+        
+        <div id="product-design" class="content-section pt-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-red-600 mb-4">Chapter 3: Product Design</h2>
+                <p class="text-justify leading-relaxed mb-6">Chapter 3 outlines the design of the "Tomato Food Delivery" system. It covers the product's perspective, its core functions, user characteristics, constraints, and high-level process flows. This section provides insight into how the system is structured and how users interact with it.</p>
+                <section class="mb-4">
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">3.1 Product Perspective</h3>
+                    <p class="text-justify leading-relaxed">"Tomato Food Delivery" is envisioned as a multi-sided platform, serving as an intermediary between customers, restaurants, and potentially delivery personnel. From a customer's perspective, it's a convenient mobile and web application for ordering food. For restaurants, it's a digital storefront and order management system. The system integrates various components to create a cohesive ecosystem. It operates as a standalone application, but its modular design allows for future integration with other services like third-party logistics providers or loyalty programs. The core focus is on delivering a seamless and efficient food ordering experience, from browsing to delivery.</p>
+                </section>
+                <section class="mb-4">
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">3.2 Product Functions</h3>
+                     <ul class="list-disc list-inside space-y-1 leading-relaxed product-functions">
+                        <li>User Management: Registration, login, profile management, password reset.</li>
+                        <li>Restaurant Management: Restaurant registration, profile setup, menu creation, item management, availability toggling.</li>
+                        <li>Food Browsing & Search: Displaying restaurants/menus, filtering, searching, sorting.</li>
+                        <li>Shopping Cart: Adding/removing items, adjusting quantities, viewing subtotal.</li>
+                        <li>Order Placement: Confirming details, selecting address, choosing payment method.</li>
+                        <li>Payment Processing: Secure payment gateway integration.</li>
+                        <li>Order Tracking: Real-time status updates.</li>
+                        <li>Notifications: Alerts for order updates, promotions.</li>
+                        <li>Ratings & Reviews: Customer feedback system.</li>
+                        <li>Admin Dashboard: Management of users, restaurants, orders, content.</li>
+                    </ul>
+                </section>
+                 <section class="mb-4">
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">3.5 Use Case Model/Flow Chart/DFDS (Key Flows)</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-lg font-semibold text-slate-600 mb-1">Customer Order Flow:</h4>
+                            <ol class="list-decimal list-inside space-y-1 text-sm leading-relaxed">
+                                <li>Customer Login/Register.</li>
+                                <li>Browse Restaurants/Menu.</li>
+                                <li>Add items to Cart.</li>
+                                <li>Checkout (Review cart, select address, payment).</li>
+                                <li>Make Payment.</li>
+                                <li>Track Order.</li>
+                                <li>Receive Order.</li>
+                                <li>Rate & Review.</li>
+                            </ol>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-slate-600 mb-1">Restaurant Order Processing Flow:</h4>
+                            <ol class="list-decimal list-inside space-y-1 text-sm leading-relaxed">
+                                <li>Receive New Order notification.</li>
+                                <li>Accept/Reject Order.</li>
+                                <li>Update Status (e.g., "Preparing").</li>
+                                <li>Handover to Delivery.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div id="database-design" class="content-section pt-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-red-600 mb-4">3.6 Database Design & 3.7 Table Structure (MongoDB Collections)</h2>
+                <p class="text-justify leading-relaxed mb-6">This section details the database design using MongoDB. Key collections include Users, Restaurants, Menus, Orders, and Reviews. Click on each collection name to view its example JSON structure. The Entity-Relationship (ER) model description follows, outlining the connections between these data entities.</p>
+                
+                <div class="space-y-3 mb-6">
+                    <div>
+                        <button class="accordion-button w-full text-left p-3 bg-slate-100 hover:bg-slate-200 rounded-md font-medium transition-colors duration-150 flex justify-between items-center">
+                            Users Collection
+                            <span class="plus-minus text-red-600 font-bold text-xl">+</span>
+                        </button>
+                        <div class="accordion-content bg-slate-800 text-slate-100 p-4 rounded-b-md mt-1">
+                            <pre><code class="language-json text-sm">
+{
+  "_id": ObjectId("..."),
+  "username": "john_doe",
+  "email": "john.doe@example.com",
+  "password": "hashed_password",
+  "role": "customer", // or "restaurant_owner", "admin"
+  "addresses": [
+    {
+      "street": "123 Main St",
+      "city": "Ludhiana",
+      "zip": "141006",
+      "label": "Home"
+    }
+  ],
+  "createdAt": ISODate("...")
+}
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="accordion-button w-full text-left p-3 bg-slate-100 hover:bg-slate-200 rounded-md font-medium transition-colors duration-150 flex justify-between items-center">
+                            Restaurants Collection
+                            <span class="plus-minus text-red-600 font-bold text-xl">+</span>
+                        </button>
+                        <div class="accordion-content bg-slate-800 text-slate-100 p-4 rounded-b-md mt-1">
+                            <pre><code class="language-json text-sm">
+{
+  "_id": ObjectId("..."),
+  "name": "Spice Garden",
+  "ownerId": ObjectId("..."), // Reference to a user
+  "address": {
+    "street": "456 Park Ave",
+    "city": "Ludhiana",
+    "zip": "141001"
+  },
+  "cuisine": ["Indian", "Chinese"],
+  "rating": 4.5,
+  "status": "open", // or "closed"
+  "imageUrl": "https://placehold.co/600x400/eee/777?text=Restaurant"
+}
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="accordion-button w-full text-left p-3 bg-slate-100 hover:bg-slate-200 rounded-md font-medium transition-colors duration-150 flex justify-between items-center">
+                            Menus Collection (Example: Embedded in Restaurant)
+                            <span class="plus-minus text-red-600 font-bold text-xl">+</span>
+                        </button>
+                        <div class="accordion-content bg-slate-800 text-slate-100 p-4 rounded-b-md mt-1">
+                            <pre><code class="language-json text-sm">
+// Inside the Restaurants document:
+"menu": [
+  {
+    "itemId": ObjectId("..."),
+    "name": "Chicken Biryani",
+    "description": "A flavorful rice dish...",
+    "price": 250,
+    "category": "Main Course",
+    "isAvailable": true,
+    "imageUrl": "https://placehold.co/400x300/eee/777?text=Food+Item"
+  },
+  // ... more items
+]
+                            </code></pre>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="accordion-button w-full text-left p-3 bg-slate-100 hover:bg-slate-200 rounded-md font-medium transition-colors duration-150 flex justify-between items-center">
+                            Orders Collection
+                            <span class="plus-minus text-red-600 font-bold text-xl">+</span>
+                        </button>
+                        <div class="accordion-content bg-slate-800 text-slate-100 p-4 rounded-b-md mt-1">
+                            <pre><code class="language-json text-sm">
+{
+  "_id": ObjectId("..."),
+  "customerId": ObjectId("..."),
+  "restaurantId": ObjectId("..."),
+  "orderItems": [
+    {
+      "itemId": ObjectId("..."),
+      "name": "Chicken Biryani",
+      "quantity": 1,
+      "price": 250
+    }
+  ],
+  "totalAmount": 250,
+  "status": "pending", // "accepted", "preparing", etc.
+  "deliveryAddress": { /* ... */ },
+  "paymentMethod": "Credit Card",
+  "paymentStatus": "paid",
+  "orderDate": ISODate("...")
+}
+                            </code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <section>
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">3.8 ER Diagram (Conceptual Relationships)</h3>
+                    <p class="text-justify leading-relaxed mb-2">The following describes the key relationships between data entities:</p>
+                    <ul class="list-disc list-inside space-y-1 leading-relaxed">
+                        <li><strong>User to Restaurant:</strong> One User (owner) can manage Many Restaurants.</li>
+                        <li><strong>Restaurant to Menu Item:</strong> One Restaurant offers Many Menu Items.</li>
+                        <li><strong>User to Order:</strong> One User places Many Orders.</li>
+                        <li><strong>Restaurant to Order:</strong> One Restaurant receives Many Orders.</li>
+                        <li><strong>User to Review:</strong> One User writes Many Reviews.</li>
+                        <li><strong>Restaurant to Review:</strong> One Restaurant receives Many Reviews.</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+        
+        <div id="specific-requirements" class="content-section pt-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-red-600 mb-4">3.10 Specific Requirements</h2>
+                <p class="text-justify leading-relaxed mb-6">This section details the specific functional and non-functional requirements that the "Tomato Food Delivery" system must meet. Functional requirements define what the system does, while non-functional requirements define how well it does it.</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-600 mb-2">Functional Requirements</h3>
+                        <ul class="list-disc list-inside space-y-1 leading-relaxed">
+                            <li>User account creation, login, profile management.</li>
+                            <li>Browse restaurants/food items with filtering/search.</li>
+                            <li>Add/remove items from shopping cart.</li>
+                            <li>Place orders with multiple payment options.</li>
+                            <li>Real-time order status updates for customers.</li>
+                            <li>Restaurant dashboard for order management.</li>
+                            <li>Admin panel for system oversight.</li>
+                            <li>Ratings and reviews system.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-amber-600 mb-2">Non-Functional Requirements</h3>
+                        <ul class="list-disc list-inside space-y-1 leading-relaxed">
+                            <li><strong>Performance:</strong> Quick load times, responsive UI.</li>
+                            <li><strong>Scalability:</strong> Support increasing users/data.</li>
+                            <li><strong>Security:</strong> Data encryption, vulnerability protection.</li>
+                            <li><strong>Usability:</strong> Intuitive and pleasant user experience.</li>
+                            <li><strong>Reliability:</strong> High availability, minimal downtime.</li>
+                            <li><strong>Maintainability:</strong> Well-structured, documented code.</li>
+                            <li><strong>Responsiveness:</strong> Adapts to various screen sizes.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="development-tech" class="content-section pt-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-red-600 mb-4">Chapter 4: Development and Implementation</h2>
+                <p class="text-justify leading-relaxed mb-6">This chapter focuses on the technical aspects of the project, detailing the languages, frameworks, and tools used in the development of the "Tomato Food Delivery" system. It provides an overview of the MERN stack components and other supporting technologies.</p>
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">4.1 Introduction to Languages (Front End and Back End)</h3>
+                    <div class="space-y-3">
+                        <p><strong>Backend (Node.js & Express.js):</strong> Node.js provides the JavaScript runtime for server-side logic. Express.js, a minimal framework for Node.js, is used to build robust RESTful APIs for user authentication, data handling, and order processing.</p>
+                        <p><strong>Frontend (React):</strong> React, a JavaScript library, is used for building the interactive user interface. Its component-based architecture allows for modular and reusable UI elements, enhancing the user experience.</p>
+                        <p><strong>Database (MongoDB):</strong> MongoDB, a NoSQL document database, stores data in flexible JSON-like documents, suitable for evolving application requirements and scaling.</p>
+                    </div>
+                </section>
+                <section>
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">4.2 Any other Supporting Languages or tools</h3>
+                    <ul class="list-disc list-inside space-y-1 leading-relaxed">
+                        <li><strong>npm (Node Package Manager):</strong> For managing project dependencies.</li>
+                        <li><strong>Visual Studio Code (VS Code):</strong> Code editor for development.</li>
+                        <li><strong>Postman:</strong> For API testing and development.</li>
+                        <li><strong>React Router:</strong> For client-side navigation in the React app.</li>
+                        <li><strong>Axios:</strong> For making HTTP requests from the frontend.</li>
+                        <li><strong>Redux/Context API:</strong> For state management in React.</li>
+                        <li><strong>Tailwind CSS:</strong> Utility-first CSS framework for styling.</li>
+                        <li><strong>Git & GitHub:</strong> For version control and collaboration.</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+
+        <div id="implementation-details" class="content-section pt-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-red-600 mb-4">4.3 Implementation of Problem</h2>
+                <p class="text-justify leading-relaxed mb-6">This section provides a glimpse into the implementation logic, including pseudo-code for key functionalities like user authentication and order placement, and a table of primary API endpoints. It illustrates how different parts of the system interact.</p>
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">User Authentication (Backend Pseudo-code)</h3>
+                    <div class="bg-slate-800 text-slate-100 p-4 rounded-md">
+                        <pre><code class="language-javascript text-sm">
+// User Registration
+FUNCTION registerUser(username, email, password)
+  IF email or username already exists THEN
+    RETURN Error: "User already exists"
+  END IF
+  HASH password
+  CREATE new User document with hashed password
+  SAVE User document to MongoDB
+  GENERATE JWT token
+  RETURN Success: User and token
+END FUNCTION
+
+// User Login
+FUNCTION loginUser(email, password)
+  FIND User by email in MongoDB
+  IF User not found THEN
+    RETURN Error: "Invalid credentials"
+  END IF
+  COMPARE password with hashed password
+  IF passwords do not match THEN
+    RETURN Error: "Invalid credentials"
+  END IF
+  GENERATE JWT token
+  RETURN Success: User and token
+END FUNCTION
+                        </code></pre>
+                    </div>
+                </section>
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">Order Placement (High-level Algorithm)</h3>
+                    <ol class="list-decimal list-inside space-y-1 leading-relaxed">
+                        <li><strong>Frontend (React):</strong> User adds items to cart, proceeds to checkout, provides details, and submits order. POST request to `/api/orders`.</li>
+                        <li><strong>Backend (Node.js/Express.js):</strong> Receives order, validates data, processes payment, creates `Order` document in MongoDB (status: "pending"), notifies restaurant.</li>
+                        <li><strong>Database (MongoDB):</strong> Stores the new `Order` document.</li>
+                    </ol>
+                </section>
+                <section>
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">Key API Endpoints (Table 4.1)</h3>
+                    <div class="overflow-x-auto rounded-md shadow">
+                        <table class="min-w-full bg-white">
+                            <thead class="bg-slate-200">
+                                <tr>
+                                    <th class="py-2 px-4 text-left text-sm font-semibold text-slate-600">Method</th>
+                                    <th class="py-2 px-4 text-left text-sm font-semibold text-slate-600">Endpoint</th>
+                                    <th class="py-2 px-4 text-left text-sm font-semibold text-slate-600">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr><td class="py-2 px-4">POST</td><td class="py-2 px-4">/api/auth/register</td><td class="py-2 px-4">Register a new user</td></tr>
+                                <tr><td class="py-2 px-4">POST</td><td class="py-2 px-4">/api/auth/login</td><td class="py-2 px-4">Log in a user</td></tr>
+                                <tr><td class="py-2 px-4">GET</td><td class="py-2 px-4">/api/restaurants</td><td class="py-2 px-4">Get all restaurants</td></tr>
+                                <tr><td class="py-2 px-4">GET</td><td class="py-2 px-4">/api/restaurants/:id/menu</td><td class="py-2 px-4">Get menu for a restaurant</td></tr>
+                                <tr><td class="py-2 px-4">POST</td><td class="py-2 px-4">/api/orders</td><td class="py-2 px-4">Place a new order</td></tr>
+                                <tr><td class="py-2 px-4">GET</td><td class="py-2 px-4">/api/orders/user/:userId</td><td class="py-2 px-4">Get orders for a user</td></tr>
+                                <tr><td class="py-2 px-4">PUT</td><td class="py-2 px-4">/api/orders/:id/status</td><td class="py-2 px-4">Update order status</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div id="test-cases" class="content-section pt-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-red-600 mb-4">4.4 Test Cases</h2>
+                <p class="text-justify leading-relaxed mb-6">Testing is vital for ensuring application quality. This section outlines example test cases, categorized into Functional and Non-Functional tests. Use the tabs to switch categories, and click on individual test case IDs to see their details (details are illustrative as per report).</p>
+                <div class="mb-4 border-b border-gray-200">
+                    <nav class="flex space-x-1" aria-label="Tabs">
+                        <button class="test-tab-button tab-button active py-3 px-4 text-sm font-medium text-center text-slate-500 rounded-t-lg hover:text-slate-700 hover:bg-slate-100" data-target="test-functional">Functional</button>
+                        <button class="test-tab-button tab-button py-3 px-4 text-sm font-medium text-center text-slate-500 rounded-t-lg hover:text-slate-700 hover:bg-slate-100" data-target="test-non-functional">Non-Functional</button>
+                    </nav>
+                </div>
+                <div>
+                    <div id="test-functional" class="test-tab-content tab-content active space-y-3">
+                        <div class="test-case">
+                            <button class="accordion-button w-full text-left p-3 bg-slate-100 hover:bg-slate-200 rounded-md font-medium transition-colors duration-150 flex justify-between items-center">
+                                TC_UR_001: User Registration (Success)
+                                <span class="plus-minus text-red-600 font-bold text-xl">+</span>
+                            </button>
+                            <div class="accordion-content p-3 border border-slate-200 rounded-b-md">
+                                <p><strong>Description:</strong> Verify successful user registration with valid credentials.</p>
+                                <p><strong>Steps:</strong> Navigate to registration, enter unique username, valid email, strong password, confirm password.</p>
+                                <p><strong>Expected Result:</strong> Account created, redirected, success message.</p>
+                            </div>
+                        </div>
+                        <div class="test-case">
+                            <button class="accordion-button w-full text-left p-3 bg-slate-100 hover:bg-slate-200 rounded-md font-medium transition-colors duration-150 flex justify-between items-center">
+                                TC_UL_001: User Login (Success)
+                                <span class="plus-minus text-red-600 font-bold text-xl">+</span>
+                            </button>
+                            <div class="accordion-content p-3 border border-slate-200 rounded-b-md">
+                                <p><strong>Description:</strong> Verify successful user login with correct credentials.</p>
+                                <p><strong>Steps:</strong> Navigate to login, enter registered email and password.</p>
+                                <p><strong>Expected Result:</strong> Logged in, redirected, user-specific content.</p>
+                            </div>
+                        </div>
+                         <div class="test-case">
+                            <button class="accordion-button w-full text-left p-3 bg-slate-100 hover:bg-slate-200 rounded-md font-medium transition-colors duration-150 flex justify-between items-center">
+                                TC_PO_001: Place Order (Success)
+                                <span class="plus-minus text-red-600 font-bold text-xl">+</span>
+                            </button>
+                            <div class="accordion-content p-3 border border-slate-200 rounded-b-md">
+                                <p><strong>Description:</strong> Verify successful order placement with valid payment.</p>
+                                <p><strong>Steps:</strong> Add items to cart, checkout, enter address, select payment, confirm.</p>
+                                <p><strong>Expected Result:</strong> Order confirmation, order in history with "pending" status.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="test-non-functional" class="test-tab-content tab-content space-y-3">
+                        <div class="test-case">
+                            <button class="accordion-button w-full text-left p-3 bg-slate-100 hover:bg-slate-200 rounded-md font-medium transition-colors duration-150 flex justify-between items-center">
+                                TC_PERF_001: Home Page Load Time
+                                <span class="plus-minus text-red-600 font-bold text-xl">+</span>
+                            </button>
+                            <div class="accordion-content p-3 border border-slate-200 rounded-b-md">
+                                <p><strong>Description:</strong> Measure page load time for the home page with 50 restaurants.</p>
+                                <p><strong>Steps:</strong> Access home page with network throttling.</p>
+                                <p><strong>Expected Result:</strong> Page loads within 3 seconds (simulated fast 3G).</p>
+                            </div>
+                        </div>
+                        <div class="test-case">
+                            <button class="accordion-button w-full text-left p-3 bg-slate-100 hover:bg-slate-200 rounded-md font-medium transition-colors duration-150 flex justify-between items-center">
+                                TC_RESP_001: Mobile Responsiveness
+                                <span class="plus-minus text-red-600 font-bold text-xl">+</span>
+                            </button>
+                            <div class="accordion-content p-3 border border-slate-200 rounded-b-md">
+                                <p><strong>Description:</strong> Verify responsiveness of restaurant listing on mobile.</p>
+                                <p><strong>Steps:</strong> Access page, resize to mobile view or use emulator.</p>
+                                <p><strong>Expected Result:</strong> Layout adjusts, no horizontal scroll, elements interactive.</p>
+                            </div>
+                        </div>
+                        <div class="test-case">
+                            <button class="accordion-button w-full text-left p-3 bg-slate-100 hover:bg-slate-200 rounded-md font-medium transition-colors duration-150 flex justify-between items-center">
+                                TC_SEC_001: Password Hashing
+                                <span class="plus-minus text-red-600 font-bold text-xl">+</span>
+                            </button>
+                            <div class="accordion-content p-3 border border-slate-200 rounded-b-md">
+                                <p><strong>Description:</strong> Verify password hashing during registration.</p>
+                                <p><strong>Steps:</strong> Register user, inspect database.</p>
+                                <p><strong>Expected Result:</strong> Password stored as hashed string.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="conclusion-future" class="content-section pt-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold text-red-600 mb-4">Chapter 5: Conclusion and Future Scope</h2>
+                <p class="text-justify leading-relaxed mb-6">The final chapter summarizes the project's achievements and discusses potential future enhancements. It reflects on the learning experience and the capabilities demonstrated by the "Tomato Food Delivery" system, while also looking ahead to how the platform could evolve.</p>
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">5.1 Conclusion</h3>
+                    <p class="text-justify leading-relaxed">The "Tomato Food Delivery" project successfully demonstrates the power and flexibility of the MERN stack in building a robust, scalable, and interactive web application. Throughout the industrial training period, this project provided invaluable hands-on experience in full-stack development, from designing database schemas in MongoDB to building responsive user interfaces with React and creating efficient backend APIs with Node.js and Express.js. The application effectively addresses the core functionalities required for a food delivery system, including user authentication, restaurant and menu management, order placement, and real-time status tracking. The development process reinforced best practices in software engineering, such as modular design, API-driven development, and comprehensive testing. This project serves as a strong foundation for understanding and implementing modern web application architectures.</p>
+                </section>
+                <section>
+                    <h3 class="text-xl font-semibold text-amber-600 mb-2">5.2 Future Scope</h3>
+                    <ul class="list-disc list-inside space-y-1 leading-relaxed">
+                        <li>Real-time Delivery Tracking (e.g., Google Maps integration).</li>
+                        <li>Dedicated Delivery Personnel Mobile App.</li>
+                        <li>Advanced Search & Filtering (dietary preferences, ingredients).</li>
+                        <li>Personalized Recommendations (Machine Learning).</li>
+                        <li>Promotions & Loyalty Programs.</li>
+                        <li>In-app Chat Support.</li>
+                        <li>Expanded Payment Options.</li>
+                        <li>Detailed Analytics Dashboard.</li>
+                        <li>Advanced Push Notifications.</li>
+                        <li>Scalability Improvements (Docker, Kubernetes).</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+        
+        <footer class="text-center py-8 mt-8 text-slate-500 text-sm">
+            Interactive Report SPA for Tomato Food Delivery System | MERN Stack Project
+        </footer>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            const srsTabButtons = document.querySelectorAll('.srs-tab-button');
+            const srsTabContents = document.querySelectorAll('.srs-tab-content');
+            const testTabButtons = document.querySelectorAll('.test-tab-button');
+            const testTabContents = document.querySelectorAll('.test-tab-content');
+            const accordionButtons = document.querySelectorAll('.accordion-button');
+
+            // Initial setup: show the first section
+            if (contentSections.length > 0) {
+                contentSections[0].classList.add('active');
+            }
+            if (navLinks.length > 0) {
+                navLinks[0].classList.add('bg-red-600', 'text-white');
+            }
+
+
+            // Sidebar navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+                            // Scroll to the top of the main content area or section
+                            document.querySelector('main').scrollTop = 0; 
+                        }
+                    });
+
+                    navLinks.forEach(nav => nav.classList.remove('bg-red-600', 'text-white'));
+                    this.classList.add('bg-red-600', 'text-white');
+                });
+            });
+            
+            // Tab functionality
+            function setupTabs(tabButtons, tabContents) {
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', function () {
+                        const targetId = this.dataset.target;
+
+                        tabButtons.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+
+                        tabContents.forEach(content => {
+                            content.classList.remove('active');
+                            if (content.id === targetId) {
+                                content.classList.add('active');
+                            }
+                        });
+                    });
+                });
+            }
+
+            setupTabs(srsTabButtons, srsTabContents);
+            setupTabs(testTabButtons, testTabContents);
+
+            // Accordion functionality
+            accordionButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const content = this.nextElementSibling;
+                    const plusMinus = this.querySelector('.plus-minus');
+                    const isActive = content.classList.contains('active');
+
+                    // Close all other accordions in the same group (optional)
+                    // this.closest('.space-y-3, .test-tab-content').querySelectorAll('.accordion-content.active').forEach(openContent => {
+                    //     if (openContent !== content) {
+                    //         openContent.classList.remove('active');
+                    //         openContent.previousElementSibling.querySelector('.plus-minus').textContent = '+';
+                    //     }
+                    // });
+                    
+                    content.classList.toggle('active');
+                    if (content.classList.contains('active')) {
+                        plusMinus.textContent = '-';
+                    } else {
+                        plusMinus.textContent = '+';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
