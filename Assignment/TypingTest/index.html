@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Speed Tester</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #667eea, #764ba2);
+      padding-top: 50px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+    }
+    .container {
+      max-width: 800px;
+    }
+    .quote-box {
+      background: #ffffff;
+      color: #333;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+      line-height: 1.6;
+      min-height: 120px;
+      transition: box-shadow 0.3s ease;
+    }
+    textarea {
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 1.1rem;
+      resize: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: border 0.3s ease;
+    }
+    textarea:disabled {
+      background-color: #eee;
+    }
+    .correct {
+      color: green;
+      font-weight: bold;
+    }
+    .incorrect {
+      color: red;
+      text-decoration: underline;
+    }
+    .btn-primary {
+      background-color: #4e54c8;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #5f67e5;
+    }
+    .status-bar {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      color: #fff;
+    }
+    .status-bar span {
+      font-weight: bold;
+    }
+    #pause-message {
+      text-align: center;
+      margin-top: 10px;
+      font-style: italic;
+      display: none;
+      color: #ffeb3b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center mb-4 fw-bold">🚀 Typing Speed Tester</h1>
+    <div class="quote-box mb-3" id="quote"></div>
+    <textarea class="form-control mb-4" id="input" rows="4" placeholder="Start typing here..." disabled></textarea>
+    <div class="d-flex justify-content-between align-items-center status-bar">
+      <button class="btn btn-primary" onclick="startTest()">Start Test</button>
+      <div><strong>⏱ Time:</strong> <span id="timer">60</span>s</div>
+      <div><strong>📝 WPM:</strong> <span id="wpm">0</span></div>
+    </div>
+    <div id="pause-message">⏸ Typing paused. Timer stopped.</div>
+  </div>
+
+  <script>
+    const sentences = [
+      "The quick brown fox jumps over the lazy dog.",
+      "Typing fast requires a lot of practice and patience.",
+      "Javascript makes websites interactive and dynamic.",
+      "Bootstrap helps build responsive designs easily.",
+      "Practice every day to improve your typing speed."
+    ];
+
+    let currentQuote = "";
+    let timer;
+    let timeLeft = 60;
+    let isRunning = false;
+    let pauseTimer;
+    const inputEl = document.getElementById("input");
+    const quoteBox = document.getElementById("quote");
+    const pauseMessage = document.getElementById("pause-message");
+
+    function startTest() {
+      clearInterval(timer);
+      clearTimeout(pauseTimer);
+      timeLeft = 60;
+      isRunning = true;
+      pauseMessage.style.display = "none";
+      inputEl.value = "";
+      inputEl.disabled = false;
+      currentQuote = sentences[Math.floor(Math.random() * sentences.length)];
+      quoteBox.innerText = currentQuote;
+      document.getElementById("timer").innerText = timeLeft;
+      document.getElementById("wpm").innerText = 0;
+      inputEl.focus();
+      timer = setInterval(updateTime, 1000);
+    }
+
+    function updateTime() {
+      if (timeLeft > 0) {
+        timeLeft--;
+        document.getElementById("timer").innerText = timeLeft;
+        calculateWPM();
+      } else {
+        clearInterval(timer);
+        isRunning = false;
+        inputEl.disabled = true;
+        pauseMessage.style.display = "none";
+      }
+    }
+
+    function calculateWPM() {
+      const inputText = inputEl.value.trim();
+      const wordsTyped = inputText.split(/\s+/).filter(word => word !== "");
+      const wpm = Math.round((wordsTyped.length / (60 - timeLeft)) * 60);
+      document.getElementById("wpm").innerText = isNaN(wpm) ? 0 : wpm;
+    }
+
+    inputEl.addEventListener("input", () => {
+      clearTimeout(pauseTimer);
+      pauseMessage.style.display = "none";
+
+      if (!isRunning && timeLeft > 0) {
+        timer = setInterval(updateTime, 1000);
+        isRunning = true;
+      }
+
+      pauseTimer = setTimeout(() => {
+        if (isRunning) {
+          clearInterval(timer);
+          isRunning = false;
+          pauseMessage.style.display = "block";
+        }
+      }, 3000);
+
+      const input = inputEl.value;
+      const quote = currentQuote;
+      let result = "";
+
+      for (let i = 0; i < quote.length; i++) {
+        if (!input[i]) {
+          result += `<span>${quote[i]}</span>`;
+        } else if (input[i] === quote[i]) {
+          result += `<span class='correct'>${quote[i]}</span>`;
+        } else {
+          result += `<span class='incorrect'>${quote[i]}</span>`;
+        }
+      }
+      quoteBox.innerHTML = result;
+    });
+  </script>
+</body>
+</html>
